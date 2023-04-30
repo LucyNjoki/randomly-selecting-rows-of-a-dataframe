@@ -1,0 +1,75 @@
+---
+title: <center><strong> R can help choose dinner `r emo::ji("shallow_pan_of_food")``r emo::ji("sunglasses")` - An illustration  of randomly selecting rows of a dataframe </strong></center>
+author: <center><strong>  Lucy Njoki Njuki </strong></center>
+date: <center><strong> `r format(Sys.Date(), '%A, %d %B %Y')` </strong></center>
+output:
+  prettydoc::html_pretty:
+    theme: leonids
+    highlight: github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+<style type="text/css">
+h1.title {
+  font-size: 40px;
+  color: DarkRed;
+}
+
+</style>
+
+<style type="text/css">
+  body{
+  font-size: 10pt;
+}
+</style>
+
+
+Having relocated from Kenya to Manchester, England, I found myself in a new environment with unfamiliar cultural practices and cuisine. When asked to choose my preferences for a Christmas party at The University of Manchester, where I currently work, I struggled to decide what starter, main course, and dessert to select due to the descriptions being unfamiliar to me. It was at this point that I realised that R could assist me with this decision. As a result, I created a tibble named `dinner_df` in R with columns labelled `starter`, `main`, and `dessert`, which contained a list of options to choose from.
+
+When performing statistical analysis, it is common to want to focus on specific subsets of data. In this Rmarkdown file, I will describe two techniques for selecting rows at random from a dataframe in R.
+
+```{r create_dataframe}
+library(tidyverse)
+
+# create a tibble with all the options
+dinner_df <- tibble(starter = c(1, 2, 3),
+                    main = c(2, 1, 3),
+                    dessert = c(3, 2, 1))
+```
+
+The description of the dataset of menu choices included:
+
+**starter**: 1) Pumpkin veloute, quince. hazelnut oil; 2) Chicken liver parfait, apple, brioche; 3) Devon brown crab crumpet, piccalilli, pink grapefruit, mint
+
+**main dishes**: 1) Roast turkey with all the trimmings; 2) Pollock, caulilower gratin, chicory, seaweed butter, Port, blackberry ; 3) Brased ox cheek, Boulongerer potato, carrot, bone marrow, red wine
+
+**dessert**: 1) Chocolate Fondant, salted caramel ice cream, boozy cherry; 2) Vanilla creme brulee, quince; 3) Stickey pear cake, toffee
+
+To choose the choices, I randomly selected rows from the tibble `dinner_df`. But first, setting seed to ensure that my choices can reproduced upon running the code again. There are two functions that can randomly select rows: 
+
+- `sample_n()` from `dplyr` R package. The two main arguments, I used was `sample_n(dataframe, size)`
+- `sample` from `base` R package. Three main arguments, I used was `sample(nrow(dataframe), size, replace = F)`. The argument replace indicates if the sampling is done with or without replacement. 
+
+## Method 1: `dplyr::sample_n()`
+
+The new subset {`my_dinner`} contains one row which has been randomly selected from the dataframe.
+
+```{r method1_using_dplr}
+set.seed(01) # to reproduce the same values for the sample
+(my_dinner <- dinner_df %>% 
+  sample_n(3))
+```
+
+## Method 2: `base::sample`
+
+```{r method2_using_baseR}
+set.seed(01)
+dinner_df[sample(nrow(dinner_df), 3, replace =F), ]
+```
+
+I had the pleasure of savoring a delicious meal that consisted of Devon brown crab crumpet with piccalilli, pink grapefruit, and mint, Braised ox cheek as the starter, served with Boulongerer potato, carrot, bone marrow, and red wine as the main course, and a delectable Chocolate Fondant with salted caramel ice cream and boozy cherry as the dessert!`r emo::ji("raised_hands")` `r emojifont::emoji('smile')`
